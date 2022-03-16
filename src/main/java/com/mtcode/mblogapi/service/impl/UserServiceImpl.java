@@ -1,6 +1,6 @@
 package com.mtcode.mblogapi.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mtcode.mblogapi.entity.User;
 import com.mtcode.mblogapi.mapper.UserMapper;
@@ -20,10 +20,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public User findUserByUsernameAndPassword(String username, String password) {
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getUsername, username);
-        User user = baseMapper.selectOne(wrapper);
-
+        User user = baseMapper.selectOne(Wrappers.lambdaQuery(User.class).eq(User::getUsername, username));
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
@@ -35,9 +32,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements Us
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        LambdaQueryWrapper<User> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(User::getUsername, username);
-        User user = baseMapper.selectOne(wrapper);
+        User user = baseMapper.selectOne(Wrappers.lambdaQuery(User.class).eq(User::getUsername, username));
         if (user == null) {
             throw new UsernameNotFoundException("用户不存在");
         }
