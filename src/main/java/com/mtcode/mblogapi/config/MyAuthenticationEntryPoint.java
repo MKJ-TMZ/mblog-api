@@ -21,7 +21,7 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
         Result result = Result.create(403, "请登录");
-        out.write(JacksonUtils.writeValueAsString(result));
+        out.write(JacksonUtils.WriteValueAsString(result));
         out.flush();
         out.close();
     }
