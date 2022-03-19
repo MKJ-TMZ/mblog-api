@@ -5,6 +5,7 @@ import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
+import org.springframework.stereotype.Component;
 
 import java.util.Collection;
 import java.util.Date;
@@ -13,12 +14,21 @@ import java.util.Date;
  * @author TangMingZhang
  * @date 2022/3/16
  */
+@Component
 public class JwtTokenUtils {
 
-    @Value("${token.secret-key}")
     private static Long EXPIRE_TIME;
-    @Value("${token.expire-time}")
     private static String SECRET_KEY;
+
+    @Value("${token.expire-time}")
+    public void setExpireTime(long expireTime) {
+        this.EXPIRE_TIME = expireTime;
+    }
+
+    @Value("${token.secret-key}")
+    public void setSecretKey(String secretKey) {
+        this.SECRET_KEY = secretKey;
+    }
 
     /**
      * 判断token是否存在
@@ -74,7 +84,6 @@ public class JwtTokenUtils {
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();
     }
-
 
     /**
      * 获取tokenBody同时校验token是否有效（无效则会抛出异常）

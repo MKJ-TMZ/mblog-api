@@ -4,6 +4,7 @@ import com.mtcode.mblogapi.util.JacksonUtils;
 import com.mtcode.mblogapi.vo.Result;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
+import org.springframework.stereotype.Component;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -15,6 +16,7 @@ import java.io.PrintWriter;
  * @author TangMingZhang
  * @date 2022/3/16
  */
+@Component
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {

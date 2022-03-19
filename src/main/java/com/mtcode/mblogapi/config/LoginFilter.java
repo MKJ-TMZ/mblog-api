@@ -1,0 +1,106 @@
+package com.mtcode.mblogapi.config;
+
+import com.mtcode.mblogapi.entity.User;
+import com.mtcode.mblogapi.exception.AuthException;
+import com.mtcode.mblogapi.util.JacksonUtils;
+import com.mtcode.mblogapi.util.JwtTokenUtils;
+import com.mtcode.mblogapi.util.ResponseUtils;
+import com.mtcode.mblogapi.vo.Result;
+import org.springframework.security.authentication.*;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
+import org.springframework.security.web.authentication.AbstractAuthenticationProcessingFilter;
+
+import javax.servlet.FilterChain;
+import javax.servlet.ServletException;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
+
+/**
+ * @author TangMingZhang
+ * @date 2022/3/18
+ */
+public class LoginFilter extends AbstractAuthenticationProcessingFilter {
+    ThreadLocal<String> currentUsername = new ThreadLocal<>();
+
+    protected LoginFilter(String defaultFilterProcessesUrl, AuthenticationManager authenticationManager) {
+        super(defaultFilterProcessesUrl, authenticationManager);
+    }
+
+    /**
+     * 登录认证
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @return Authentication
+     */
+    @Override
+    public Authentication attemptAuthentication(HttpServletRequest request, HttpServletResponse response)
+            throws AuthenticationException, IOException, ServletException {
+        try {
+            if (!"POST".equals(request.getMethod())) {
+                throw new AuthException("请求方法错误");
+            }
+            User user = JacksonUtils.ReadValue(request.getInputStream(), User.class);
+            assert user != null;
+            currentUsername.set(user.getUsername());
+            return getAuthenticationManager()
+                    .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
+        } catch (AuthException | AuthenticationException | IOException e) {
+            e.printStackTrace();
+            ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(400, "非法请求")));
+            return null;
+        }
+    }
+
+    /**
+     * 认证成功
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param chain FilterChain
+     * @param authResult Authentication
+     */
+    @Override
+    protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                            FilterChain chain, Authentication authResult) throws IOException {
+        String jwt = JwtTokenUtils.GenerateToken(authResult.getName(), authResult.getAuthorities());
+        User user = (User) authResult.getPrincipal();
+        user.setPassword(null);
+        Map<String, Object> map = new HashMap<>();
+        map.put("user", user);
+        map.put("token", jwt);
+        Result result = Result.ok("登录成功", map);
+        ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(result));
+    }
+
+    /**
+     * 认证失败
+     *
+     * @param request HttpServletRequest
+     * @param response HttpServletResponse
+     * @param exception AuthenticationException
+     */
+    @Override
+    protected void unsuccessfulAuthentication(HttpServletRequest request, HttpServletResponse response,
+                                              AuthenticationException exception) throws IOException {
+        response.setContentType("application/json;charset=utf-8");
+        String msg = exception.getMessage();
+        //登录不成功时，会抛出对应的异常
+        if (exception instanceof LockedException) {
+            msg = "账号被锁定";
+        } else if (exception instanceof CredentialsExpiredException) {
+            msg = "密码过期";
+        } else if (exception instanceof AccountExpiredException) {
+            msg = "账号过期";
+        } else if (exception instanceof DisabledException) {
+            msg = "账号被禁用";
+        } else if (exception instanceof BadCredentialsException) {
+            msg = "用户名或密码错误";
+        }
+        ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(401, msg)));
+    }
+}
