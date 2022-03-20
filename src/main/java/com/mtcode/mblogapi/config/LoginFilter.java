@@ -114,6 +114,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             case "org.springframework.security.authentication.BadCredentialsException":
                 msg = "用户名或密码错误";
                 break;
+            default:
+                msg = "登录失败";
         }
         ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(401, msg)));
     }
