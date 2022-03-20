@@ -6,6 +6,7 @@ import com.mtcode.mblogapi.util.JacksonUtils;
 import com.mtcode.mblogapi.util.JwtTokenUtils;
 import com.mtcode.mblogapi.util.ResponseUtils;
 import com.mtcode.mblogapi.vo.Result;
+import com.mtcode.mblogapi.vo.UserLoginVO;
 import org.springframework.security.authentication.*;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
@@ -77,9 +78,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
                                             FilterChain chain, Authentication authResult) throws IOException {
         String jwt = JwtTokenUtils.GenerateToken(authResult.getName(), authResult.getAuthorities());
         User user = (User) authResult.getPrincipal();
-        user.setPassword(null);
+        UserLoginVO userLoginVO = new UserLoginVO(user.getId(), user.getNickname(), user.getAvatar(), user.getRole());
         Map<String, Object> map = new HashMap<>();
-        map.put("user", user);
+        map.put("user", userLoginVO);
         map.put("token", jwt);
         Result result = Result.ok("登录成功", map);
         ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(result));
