@@ -1,6 +1,7 @@
 package com.mtcode.mblogapi.config;
 
 import com.mtcode.mblogapi.util.JacksonUtils;
+import com.mtcode.mblogapi.util.ResponseUtils;
 import com.mtcode.mblogapi.vo.Result;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.AuthenticationEntryPoint;
@@ -20,11 +21,7 @@ import java.io.PrintWriter;
 public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
-        response.setContentType("application/json;charset=utf-8");
-        PrintWriter out = response.getWriter();
         Result result = Result.create(403, "请登录");
-        out.write(JacksonUtils.WriteValueAsString(result));
-        out.flush();
-        out.close();
+        ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(result));
     }
 }
