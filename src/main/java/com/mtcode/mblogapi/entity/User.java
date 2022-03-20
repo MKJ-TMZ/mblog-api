@@ -24,13 +24,45 @@ import java.util.List;
 public class User implements UserDetails {
     @TableId(type = IdType.ASSIGN_ID)
     private Long id;
+
+    /**
+     * 用户名
+     */
     private String username;
+
+    /**
+     * 用户名
+     */
     private String password;
+
+    /**
+     * 昵称
+     */
     private String nickname;
+
+    /**
+     * 头像地址
+     */
     private String avatar;
+
+    /**
+     * 邮箱
+     */
     private String email;
+
+    /**
+     * 创建时间
+     */
     private Date createTime;
+
+    /**
+     * 更新时间
+     */
     private Date updateTime;
+
+    /**
+     * 角色访问权限
+     */
     private String role;
 
     @Override
