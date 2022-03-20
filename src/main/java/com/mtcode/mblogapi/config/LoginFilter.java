@@ -33,7 +33,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     /**
      * 登录认证
      *
-     * @param request HttpServletRequest
+     * @param request  HttpServletRequest
      * @param response HttpServletResponse
      * @return Authentication
      */
@@ -49,9 +49,17 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             currentUsername.set(user.getUsername());
             return getAuthenticationManager()
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
-        } catch (AuthException | AuthenticationException | IOException e) {
+        } catch (AuthException e) {
             e.printStackTrace();
-            ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(400, "非法请求")));
+            ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(400, e.getMessage())));
+            return null;
+        } catch (AuthenticationException e) {
+            e.printStackTrace();
+            unsuccessfulAuthentication(request, response, e);
+            return null;
+        } catch (IOException e) {
+            e.printStackTrace();
+            ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(400, "请求错误")));
             return null;
         }
     }
@@ -59,9 +67,9 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     /**
      * 认证成功
      *
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse
-     * @param chain FilterChain
+     * @param request    HttpServletRequest
+     * @param response   HttpServletResponse
+     * @param chain      FilterChain
      * @param authResult Authentication
      */
     @Override
@@ -80,8 +88,8 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
     /**
      * 认证失败
      *
-     * @param request HttpServletRequest
-     * @param response HttpServletResponse
+     * @param request   HttpServletRequest
+     * @param response  HttpServletResponse
      * @param exception AuthenticationException
      */
     @Override
@@ -90,16 +98,22 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         response.setContentType("application/json;charset=utf-8");
         String msg = exception.getMessage();
         //登录不成功时，会抛出对应的异常
-        if (exception instanceof LockedException) {
-            msg = "账号被锁定";
-        } else if (exception instanceof CredentialsExpiredException) {
-            msg = "密码过期";
-        } else if (exception instanceof AccountExpiredException) {
-            msg = "账号过期";
-        } else if (exception instanceof DisabledException) {
-            msg = "账号被禁用";
-        } else if (exception instanceof BadCredentialsException) {
-            msg = "用户名或密码错误";
+        switch (exception.getClass().getName()) {
+            case "org.springframework.security.authentication.LockedException":
+                msg = "账号被锁定";
+                break;
+            case "org.springframework.security.authentication.CredentialsExpiredException":
+                msg = "密码过期";
+                break;
+            case "org.springframework.security.authentication.AccountExpiredException":
+                msg = "账号过期";
+                break;
+            case "org.springframework.security.authentication.DisabledException":
+                msg = "账号被禁用";
+                break;
+            case "org.springframework.security.authentication.BadCredentialsException":
+                msg = "用户名或密码错误";
+                break;
         }
         ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(401, msg)));
     }
