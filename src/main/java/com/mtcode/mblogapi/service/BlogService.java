@@ -1,0 +1,20 @@
+package com.mtcode.mblogapi.service;
+
+import com.baomidou.mybatisplus.extension.service.IService;
+import com.mtcode.mblogapi.entity.Blog;
+import com.mtcode.mblogapi.vo.BlogVO;
+import com.mtcode.mblogapi.vo.Result;
+
+/**
+ * @author TangMingZhang
+ * @date 2022/3/20
+ */
+public interface BlogService extends IService<Blog> {
+
+    /**
+     * 更新或保存blog
+     * @param blogVO blogVO实体类
+     * @return Result
+     */
+    Result updateOrSaveBlog(BlogVO blogVO);
+}

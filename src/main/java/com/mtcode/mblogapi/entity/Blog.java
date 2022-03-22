@@ -105,4 +105,14 @@ public class Blog implements Serializable {
      * 文章作者
      */
     private Long userId;
+
+    /**
+     * 是否为草稿
+     */
+    private Boolean isDraft;
+
+    /**
+     * 是否删除
+     */
+    private Boolean isDelete;
 }

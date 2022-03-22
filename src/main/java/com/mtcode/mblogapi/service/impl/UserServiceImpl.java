@@ -6,6 +6,7 @@ import com.mtcode.mblogapi.entity.User;
 import com.mtcode.mblogapi.mapper.UserMapper;
 import com.mtcode.mblogapi.service.UserService;
 import com.mtcode.mblogapi.util.HashUtils;
+import lombok.AllArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -16,6 +17,7 @@ import org.springframework.stereotype.Service;
  * @date 2022/3/15
  */
 @Service
+@AllArgsConstructor
 public class UserServiceImpl extends ServiceImpl<UserMapper, User> implements UserService, UserDetailsService {
 
     @Override

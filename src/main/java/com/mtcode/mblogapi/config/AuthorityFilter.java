@@ -44,7 +44,7 @@ public class AuthorityFilter implements Filter {
                 Claims claims = JwtTokenUtils.GetTokenBody(jwt);
                 String username = claims.getSubject();
                 List<GrantedAuthority> authorities =
-                        AuthorityUtils.commaSeparatedStringToAuthorityList((String) claims.get("authorities"));
+                        AuthorityUtils.commaSeparatedStringToAuthorityList(claims.get("authorities").toString());
                 UsernamePasswordAuthenticationToken token =
                         new UsernamePasswordAuthenticationToken(username, null, authorities);
                 SecurityContextHolder.getContext().setAuthentication(token);

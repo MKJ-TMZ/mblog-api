@@ -5,7 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-import java.util.List;
+import java.util.Set;
 
 /**
  * @author TangMingZhang
@@ -19,10 +19,10 @@ public class BlogVO extends Blog {
     /**
      * 分类名称
      */
-    private String categoryId;
+    private String categoryName;
 
     /**
      * 标签名称
      */
-    private List<String> tagNameList;
+    private Set<String> tagNameSet;
 }

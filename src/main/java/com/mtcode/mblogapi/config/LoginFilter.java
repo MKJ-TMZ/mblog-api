@@ -46,6 +46,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             if (!"POST".equals(request.getMethod())) {
                 throw new AuthException("请求方法错误");
             }
+
             User user = JacksonUtils.ReadValue(request.getInputStream(), User.class);
             assert user != null;
             currentUsername.set(user.getUsername());

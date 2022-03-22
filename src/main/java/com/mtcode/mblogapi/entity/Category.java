@@ -24,4 +24,9 @@ public class Category implements Serializable {
      * 分类名称
      */
     private String name;
+
+    /**
+     * 是否删除
+     */
+    private Boolean isDelete;
 }

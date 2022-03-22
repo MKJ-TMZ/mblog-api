@@ -3,6 +3,8 @@ package com.mtcode.mblogapi.util;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import io.netty.util.internal.StringUtil;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.stereotype.Component;
@@ -64,7 +66,7 @@ public class JwtTokenUtils {
     public static String GenerateToken(String subject, Collection<? extends GrantedAuthority> authorities) {
         return Jwts.builder()
                 .setSubject(subject)
-                .claim("authorities", authorities.toArray())
+                .claim("authorities", StringUtils.join(authorities, ","))
                 .setExpiration(new Date(System.currentTimeMillis() + EXPIRE_TIME))
                 .signWith(SignatureAlgorithm.HS512, SECRET_KEY)
                 .compact();

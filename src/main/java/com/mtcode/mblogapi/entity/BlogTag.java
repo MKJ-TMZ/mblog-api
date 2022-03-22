@@ -29,4 +29,9 @@ public class BlogTag implements Serializable {
      * 标签id
      */
     private Long tagId;
+
+    /**
+     * 是否删除
+     */
+    private Boolean isDelete;
 }
