@@ -3,6 +3,8 @@ package com.mtcode.mblogapi.entity;
 import com.baomidou.mybatisplus.annotation.IdType;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,7 @@ import java.util.Date;
 public class Blog implements Serializable {
 
     @TableId(type = IdType.ASSIGN_ID)
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long id;
 
     /**
@@ -89,6 +92,7 @@ public class Blog implements Serializable {
     /**
      * 文章分类
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long categoryId;
 
     /**
@@ -104,6 +108,7 @@ public class Blog implements Serializable {
     /**
      * 文章作者
      */
+    @JsonSerialize(using = ToStringSerializer.class)
     private Long userId;
 
     /**
