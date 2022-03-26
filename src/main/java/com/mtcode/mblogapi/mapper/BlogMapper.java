@@ -21,5 +21,5 @@ public interface BlogMapper extends BaseMapper<Blog> {
      * @param query 分页参数
      * @return list集合
      */
-    List<BlogVO> selectPageVO(@Param("page") IPage<BlogVO> query);
+    List<BlogVO> selectPageVO(@Param("page") IPage<BlogVO> query, @Param("req") BlogVO blogVO);
 }

@@ -27,5 +27,5 @@ public interface BlogService extends IService<Blog> {
      * @param query 分页参数
      * @return 分页结果
      */
-    IPage<BlogVO> pageVO(Page<BlogVO> query);
+    IPage<BlogVO> pageVO(Page<BlogVO> query, BlogVO blogVO);
 }

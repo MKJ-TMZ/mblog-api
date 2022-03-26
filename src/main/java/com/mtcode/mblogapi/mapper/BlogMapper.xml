@@ -3,5 +3,12 @@
 <mapper namespace="com.mtcode.mblogapi.mapper.BlogMapper">
     <select id="selectPageVO" resultType="com.mtcode.mblogapi.vo.BlogVO">
         SELECT * FROM blog WHERE is_delete = 0
+        <if test="req.title != null and req.title != ''">
+            <bind name="title" value="'%' + req.title + '%'"/>
+            AND title LIKE #{title}
+        </if>
+        <if test="req.categoryId != null and req.categoryId != ''">
+            AND category_id = #{req.categoryId}
+        </if>
     </select>
 </mapper>

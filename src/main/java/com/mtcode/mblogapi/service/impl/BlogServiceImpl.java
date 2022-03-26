@@ -80,11 +80,11 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     }
 
     @Override
-    public IPage<BlogVO> pageVO(Page<BlogVO> query) {
-        List<BlogVO> blogVOList = baseMapper.selectPageVO(query);
-        for (BlogVO blogVO : blogVOList) {
-            if (blogVO != null) {
-                blogVO.setCategoryName(categoryService.getCategoryName(blogVO.getCategoryId()));
+    public IPage<BlogVO> pageVO(Page<BlogVO> query, BlogVO blogVO) {
+        List<BlogVO> blogVOList = baseMapper.selectPageVO(query, blogVO);
+        for (BlogVO blog : blogVOList) {
+            if (blog != null) {
+                blog.setCategoryName(categoryService.getCategoryName(blog.getCategoryId()));
             }
         }
         return new Page<BlogVO>().setRecords(blogVOList);

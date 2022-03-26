@@ -24,7 +24,7 @@ public class BlogAdminController {
     }
 
     @GetMapping("/page")
-    public Result page(Page<BlogVO> query) {
-        return Result.ok("成功", blogService.pageVO(query));
+    public Result page(Page<BlogVO> query, BlogVO blogVO) {
+        return Result.ok("成功", blogService.pageVO(query, blogVO));
     }
 }
