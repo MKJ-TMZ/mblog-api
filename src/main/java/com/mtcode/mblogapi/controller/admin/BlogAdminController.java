@@ -1,5 +1,6 @@
 package com.mtcode.mblogapi.controller.admin;
 
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mtcode.mblogapi.service.BlogService;
 import com.mtcode.mblogapi.vo.BlogVO;
 import com.mtcode.mblogapi.vo.Result;
@@ -23,7 +24,7 @@ public class BlogAdminController {
     }
 
     @GetMapping("/page")
-    public Result page() {
-        return null;
+    public Result page(Page<BlogVO> query) {
+        return Result.ok("成功", blogService.pageVO(query));
     }
 }

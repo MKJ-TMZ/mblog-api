@@ -47,14 +47,14 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
                 throw new AuthException("请求方法错误");
             }
 
-            User user = JacksonUtils.ReadValue(request.getInputStream(), User.class);
+            User user = JacksonUtils.readValue(request.getInputStream(), User.class);
             assert user != null;
             currentUsername.set(user.getUsername());
             return getAuthenticationManager()
                     .authenticate(new UsernamePasswordAuthenticationToken(user.getUsername(), user.getPassword()));
         } catch (AuthException e) {
             e.printStackTrace();
-            ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(400, e.getMessage())));
+            ResponseUtils.responseOutJson(response, JacksonUtils.writeValueAsString(Result.create(400, e.getMessage())));
             return null;
         } catch (AuthenticationException e) {
             e.printStackTrace();
@@ -62,7 +62,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             return null;
         } catch (IOException e) {
             e.printStackTrace();
-            ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(400, "请求错误")));
+            ResponseUtils.responseOutJson(response, JacksonUtils.writeValueAsString(Result.create(400, "请求错误")));
             return null;
         }
     }
@@ -85,7 +85,7 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
         map.put("user", userLoginVO);
         map.put("token", jwt);
         Result result = Result.ok("登录成功", map);
-        ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(result));
+        ResponseUtils.responseOutJson(response, JacksonUtils.writeValueAsString(result));
     }
 
     /**
@@ -120,6 +120,6 @@ public class LoginFilter extends AbstractAuthenticationProcessingFilter {
             default:
                 msg = "登录失败";
         }
-        ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(401, msg)));
+        ResponseUtils.responseOutJson(response, JacksonUtils.writeValueAsString(Result.create(401, msg)));
     }
 }

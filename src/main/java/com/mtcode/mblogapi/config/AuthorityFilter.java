@@ -51,7 +51,7 @@ public class AuthorityFilter implements Filter {
             } catch (Exception e) {
                 e.printStackTrace();
                 Result result = Result.create(403, "凭证已失效，请重新登录！");
-                ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(result));
+                ResponseUtils.responseOutJson(response, JacksonUtils.writeValueAsString(result));
                 return;
             }
         }

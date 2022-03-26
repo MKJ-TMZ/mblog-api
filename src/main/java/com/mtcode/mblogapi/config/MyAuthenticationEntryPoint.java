@@ -22,6 +22,6 @@ public class MyAuthenticationEntryPoint implements AuthenticationEntryPoint {
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException, ServletException {
         Result result = Result.create(403, "请登录");
-        ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(result));
+        ResponseUtils.responseOutJson(response, JacksonUtils.writeValueAsString(result));
     }
 }

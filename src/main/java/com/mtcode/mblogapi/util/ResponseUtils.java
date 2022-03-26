@@ -17,7 +17,7 @@ public class ResponseUtils {
      * @param result 序列化后的字符串
      * @throws IOException IOException
      */
-    public static void ResponseOutJson(HttpServletResponse response, String result) throws IOException {
+    public static void responseOutJson(HttpServletResponse response, String result) throws IOException {
         response.setContentType("application/json;charset=utf-8");
         PrintWriter out = response.getWriter();
         out.write(result);

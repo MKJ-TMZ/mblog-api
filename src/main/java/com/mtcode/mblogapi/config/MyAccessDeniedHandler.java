@@ -20,6 +20,6 @@ import java.io.IOException;
 public class MyAccessDeniedHandler implements AccessDeniedHandler {
     @Override
     public void handle(HttpServletRequest request, HttpServletResponse response, AccessDeniedException accessDeniedException) throws IOException, ServletException {
-        ResponseUtils.ResponseOutJson(response, JacksonUtils.WriteValueAsString(Result.create(403, "抱歉，您没有访问该接口的权限")));
+        ResponseUtils.responseOutJson(response, JacksonUtils.writeValueAsString(Result.create(403, "抱歉，您没有访问该接口的权限")));
     }
 }
