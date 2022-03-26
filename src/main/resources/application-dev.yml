@@ -17,13 +17,17 @@ spring:
 mybatis-plus:
   global-config:
     db-config:
-      logic-delete-field: is_delete # 全局逻辑删除的实体字段名
+      logic-delete-field: isDelete # 全局逻辑删除的实体字段名
       logic-delete-value: 1 # 逻辑已删除值(默认为 1)
       logic-not-delete-value: 0 # 逻辑未删除值(默认为 0)
 
 logging:
   level:
     root: info
+    com:
+      mtcode:
+        mblogapi:
+          mapper: debug
 
 token:
   # 1000 * 60 * 60 * 24 * 3
