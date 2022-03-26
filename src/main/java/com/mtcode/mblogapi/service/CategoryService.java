@@ -8,4 +8,12 @@ import com.mtcode.mblogapi.entity.Category;
  * @date 2022/3/22
  */
 public interface CategoryService extends IService<Category> {
+
+    /**
+     * 获取分类名称
+     *
+     * @param categoryId 分类id
+     * @return 分类名称
+     */
+    String getCategoryName(Long categoryId);
 }

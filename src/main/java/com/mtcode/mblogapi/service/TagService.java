@@ -19,4 +19,12 @@ public interface TagService extends IService<Tag> {
      * @return TagList
      */
     List<Tag> saveLackTag(Set<String> tagNameSet);
+
+    /**
+     * 读取缓存中的标签名
+     *
+     * @param tagId 标签id
+     * @return 标签名
+     */
+    String getTagName(Long tagId);
 }

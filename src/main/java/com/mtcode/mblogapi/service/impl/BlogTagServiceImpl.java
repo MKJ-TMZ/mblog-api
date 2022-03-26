@@ -29,7 +29,7 @@ public class BlogTagServiceImpl extends ServiceImpl<BlogTagMapper, BlogTag> impl
     @Override
     @Transactional(rollbackFor = Exception.class)
     public List<BlogTag> saveBlogTagList(Long blogId, Set<String> tagNameSet) {
-        if (blogId == null || tagNameSet == null) {
+        if (blogId == null) {
             throw new ParameterException("参数错误");
         }
 
