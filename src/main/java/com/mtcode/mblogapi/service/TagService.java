@@ -27,4 +27,11 @@ public interface TagService extends IService<Tag> {
      * @return 标签名
      */
     String getTagName(Long tagId);
+
+    /**
+     * 更新或保存
+     *
+     * @param tag tag实体类
+     */
+    void updateOrSaveTag(Tag tag);
 }

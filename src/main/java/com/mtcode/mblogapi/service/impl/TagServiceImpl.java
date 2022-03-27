@@ -10,12 +10,12 @@ import com.mtcode.mblogapi.service.TagService;
 import com.mtcode.mblogapi.util.CacheUtils;
 import com.mtcode.mblogapi.util.Func;
 import lombok.AllArgsConstructor;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-
-import static com.mtcode.mblogapi.util.JacksonUtils.writeValueAsString;
+import java.util.ArrayList;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * @author TangMingZhang
@@ -80,6 +80,26 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
             }
         } else {
             return tag.getName();
+        }
+    }
+
+    @Override
+    public void updateOrSaveTag(Tag tag) {
+        if (tag != null) {
+            if (Func.isEmptyAsString(tag.getName())) {
+                throw new ParameterException("参数错误");
+            }
+
+            if (Func.isEmptyAsString(tag.getColor())) {
+                tag.setColor("teal");
+            }
+            if (tag.getId() == null) {
+                save(tag);
+            } else {
+                updateById(tag);
+            }
+        } else {
+            throw new ParameterException("参数错误");
         }
     }
 }
