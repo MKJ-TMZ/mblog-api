@@ -16,4 +16,11 @@ public interface CategoryService extends IService<Category> {
      * @return 分类名称
      */
     String getCategoryName(Long categoryId);
+
+    /**
+     * 更新或保存
+     *
+     * @param category category实体类
+     */
+    void updateOrSaveCategory(Category category);
 }

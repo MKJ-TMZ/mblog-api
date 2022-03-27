@@ -49,6 +49,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
             for (String tagName : tagNameSet) {
                 Tag tag = new Tag();
                 tag.setName(tagName);
+                tag.setColor("teal");
                 lackTagList.add(tag);
             }
             saveBatch(lackTagList);
