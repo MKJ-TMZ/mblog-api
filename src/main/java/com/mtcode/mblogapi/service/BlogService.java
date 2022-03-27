@@ -17,9 +17,8 @@ public interface BlogService extends IService<Blog> {
      * 更新或保存blog
      *
      * @param blogVO blogVO实体类
-     * @return Result
      */
-    Result updateOrSaveBlog(BlogVO blogVO);
+    void updateOrSaveBlog(BlogVO blogVO);
 
     /**
      * 分页查询
@@ -28,4 +27,19 @@ public interface BlogService extends IService<Blog> {
      * @return 分页结果
      */
     IPage<BlogVO> pageVO(Page<BlogVO> query, BlogVO blogVO);
+
+    /**
+     * 更新博客
+     *
+     * @param blog blog实体类
+     */
+    void update(Blog blog);
+
+    /**
+     * 博客详情
+     *
+     * @param id 博客id
+     * @return blogVO实体类
+     */
+    BlogVO detail(Long id);
 }

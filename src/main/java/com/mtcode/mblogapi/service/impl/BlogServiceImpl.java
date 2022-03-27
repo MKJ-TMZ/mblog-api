@@ -5,8 +5,12 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mtcode.mblogapi.constant.RedisConstant;
+import com.mtcode.mblogapi.converter.BlogConverter;
 import com.mtcode.mblogapi.entity.Blog;
+import com.mtcode.mblogapi.entity.BlogTag;
 import com.mtcode.mblogapi.entity.Category;
+import com.mtcode.mblogapi.entity.Tag;
+import com.mtcode.mblogapi.exception.NullException;
 import com.mtcode.mblogapi.exception.ParameterException;
 import com.mtcode.mblogapi.mapper.BlogMapper;
 import com.mtcode.mblogapi.service.BlogService;
@@ -16,15 +20,14 @@ import com.mtcode.mblogapi.service.TagService;
 import com.mtcode.mblogapi.util.CacheUtils;
 import com.mtcode.mblogapi.util.Func;
 import com.mtcode.mblogapi.vo.BlogVO;
-import com.mtcode.mblogapi.vo.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.List;
-import java.util.Objects;
+import java.util.Set;
 
 /**
  * @author TangMingZhang
@@ -36,11 +39,12 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     private final CategoryService categoryService;
     private final BlogTagService blogTagService;
+    private final TagService tagService;
     private final CacheUtils cacheUtils;
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public Result updateOrSaveBlog(BlogVO blogVO) {
+    public void updateOrSaveBlog(BlogVO blogVO) {
         if (blogVO != null) {
             if (!blogVO.getIsDraft() && Func.isEmptyAsString(blogVO.getTitle(), blogVO.getContent(), blogVO.getDescription())) {
                 throw new ParameterException("参数错误");
@@ -72,10 +76,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
             // 保存博客标签关联信息
             blogTagService.saveBlogTagList(blogVO.getId(), blogVO.getTagNameSet());
-
-            return Result.ok("成功");
         } else {
-            return Result.error("参数错误");
+            throw new ParameterException("参数错误");
         }
     }
 
@@ -88,5 +90,41 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
             }
         }
         return new Page<BlogVO>().setRecords(blogVOList);
+    }
+
+    @Override
+    public void update(Blog blog) {
+        if (blog != null && blog.getId() != null) {
+            updateById(blog);
+        } else {
+            throw new ParameterException("参数错误");
+        }
+    }
+
+    @Override
+    public BlogVO detail(Long id) {
+        if (id == null) {
+            throw new ParameterException("参数错误");
+        }
+
+        Blog blog = getById(id);
+        if (blog == null) {
+            throw new NullException("该博客不存在");
+        }
+        BlogVO blogVO = BlogConverter.INSTANCE.blogToBlogVO(blog);
+        blogVO.setCategoryName(categoryService.getCategoryName(blogVO.getCategoryId()));
+
+        List<BlogTag> blogTagList = blogTagService.list(Wrappers.lambdaQuery(BlogTag.class).eq(BlogTag::getBlogId, blogVO.getId()));
+        if (blogTagList != null) {
+            Set<String> tagNameSet = new HashSet<>();
+            for (BlogTag blogTag : blogTagList) {
+                if (blogTag != null && blogTag.getTagId() != null) {
+                    tagNameSet.add(tagService.getTagName(blogTag.getTagId()));
+                }
+            }
+            blogVO.setTagNameSet(tagNameSet);
+        }
+
+        return blogVO;
     }
 }

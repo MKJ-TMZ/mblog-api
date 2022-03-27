@@ -16,4 +16,19 @@ public class GlobalExceptionHandler {
         e.printStackTrace();
         return Result.create(500, "服务器异常");
     }
+
+    @ExceptionHandler(value = ParameterException.class)
+    public Result ParameterException(ParameterException e) {
+        return Result.create(400, e.getMessage());
+    }
+
+    @ExceptionHandler(value = AuthException.class)
+    public Result AuthException(AuthException e) {
+        return Result.create(401, e.getMessage());
+    }
+
+    @ExceptionHandler(value = NullException.class)
+    public Result OtherException(NullException e) {
+        return Result.create(400, e.getMessage());
+    }
 }

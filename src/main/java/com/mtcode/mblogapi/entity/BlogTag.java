@@ -34,9 +34,4 @@ public class BlogTag implements Serializable {
      */
     @JsonSerialize(using = ToStringSerializer.class)
     private Long tagId;
-
-    /**
-     * 是否删除
-     */
-    private Boolean isDelete;
 }
