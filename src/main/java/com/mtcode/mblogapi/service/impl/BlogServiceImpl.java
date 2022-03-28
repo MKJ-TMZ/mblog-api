@@ -59,7 +59,6 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
                     newCategory.setName(blogVO.getCategoryName());
                     categoryService.save(newCategory);
                     blogVO.setCategoryId(newCategory.getId());
-                    cacheUtils.setValue(RedisConstant.CATEGORY + newCategory.getId(), newCategory);
                 } else {
                     blogVO.setCategoryId(category.getId());
                 }
@@ -89,7 +88,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
                 blog.setCategoryName(categoryService.getCategoryName(blog.getCategoryId()));
             }
         }
-        return new Page<BlogVO>().setRecords(blogVOList);
+        return query.setRecords(blogVOList);
     }
 
     @Override

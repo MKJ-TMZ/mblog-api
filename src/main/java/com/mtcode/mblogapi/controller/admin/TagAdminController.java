@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class TagAdminController {
 
-    private TagService tagService;
+    private final TagService tagService;
 
     @GetMapping("/list")
     public Result list() {

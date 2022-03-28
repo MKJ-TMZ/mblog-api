@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.*;
 @AllArgsConstructor
 public class CategoryAdminController {
 
-    private CategoryService categoryService;
+    private final CategoryService categoryService;
 
     @GetMapping("/list")
     public Result list() {

@@ -29,7 +29,7 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
     @Override
     public List<Tag> saveLackTag(Set<String> tagNameSet) {
-        if (tagNameSet == null) {
+        if (tagNameSet == null || tagNameSet.size() <= 0) {
             return new ArrayList<>();
         }
 
@@ -53,13 +53,6 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
                 lackTagList.add(tag);
             }
             saveBatch(lackTagList);
-
-            // 更新redis缓存
-            for (Tag lackTag : lackTagList) {
-                if (lackTag != null) {
-                    cacheUtils.setValue(RedisConstant.TAG + lackTag.getId(), lackTag);
-                }
-            }
         }
 
         // 将已有的tag集合和没有的tag集合合并返回
