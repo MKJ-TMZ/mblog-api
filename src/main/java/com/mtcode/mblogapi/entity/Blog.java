@@ -109,7 +109,7 @@ public class Blog implements Serializable {
      * 文章作者
      */
     @JsonSerialize(using = ToStringSerializer.class)
-    private Long userId;
+    private Long createUser;
 
     /**
      * 是否为草稿

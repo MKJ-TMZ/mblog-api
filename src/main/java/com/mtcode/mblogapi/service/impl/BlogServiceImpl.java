@@ -15,6 +15,7 @@ import com.mtcode.mblogapi.service.BlogService;
 import com.mtcode.mblogapi.service.BlogTagService;
 import com.mtcode.mblogapi.service.CategoryService;
 import com.mtcode.mblogapi.service.TagService;
+import com.mtcode.mblogapi.util.Auth;
 import com.mtcode.mblogapi.util.Func;
 import com.mtcode.mblogapi.vo.BlogVO;
 import lombok.AllArgsConstructor;
@@ -63,6 +64,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
             Date date = new Date();
             if (blogVO.getId() == null) {
                 blogVO.setCreateTime(date);
+                blogVO.setCreateUser(Auth.getUserId());
                 save(blogVO);
             } else {
                 blogVO.setUpdateTime(date);
