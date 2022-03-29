@@ -4,12 +4,10 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.mtcode.mblogapi.constant.RedisConstant;
 import com.mtcode.mblogapi.converter.BlogConverter;
 import com.mtcode.mblogapi.entity.Blog;
 import com.mtcode.mblogapi.entity.BlogTag;
 import com.mtcode.mblogapi.entity.Category;
-import com.mtcode.mblogapi.entity.Tag;
 import com.mtcode.mblogapi.exception.NullException;
 import com.mtcode.mblogapi.exception.ParameterException;
 import com.mtcode.mblogapi.mapper.BlogMapper;
@@ -17,7 +15,6 @@ import com.mtcode.mblogapi.service.BlogService;
 import com.mtcode.mblogapi.service.BlogTagService;
 import com.mtcode.mblogapi.service.CategoryService;
 import com.mtcode.mblogapi.service.TagService;
-import com.mtcode.mblogapi.util.CacheUtils;
 import com.mtcode.mblogapi.util.Func;
 import com.mtcode.mblogapi.vo.BlogVO;
 import lombok.AllArgsConstructor;
@@ -40,7 +37,6 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     private final CategoryService categoryService;
     private final BlogTagService blogTagService;
     private final TagService tagService;
-    private final CacheUtils cacheUtils;
 
     @Override
     @Transactional(rollbackFor = Exception.class)

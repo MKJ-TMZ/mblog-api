@@ -25,8 +25,6 @@ import java.util.Set;
 @AllArgsConstructor
 public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagService {
 
-    private final CacheUtils cacheUtils;
-
     @Override
     public List<Tag> saveLackTag(Set<String> tagNameSet) {
         if (tagNameSet == null || tagNameSet.size() <= 0) {
@@ -62,11 +60,11 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
 
     @Override
     public String getTagName(Long tagId) {
-        Tag tag = cacheUtils.getValue(RedisConstant.TAG + tagId, Tag.class);
+        Tag tag = CacheUtils.getValue(RedisConstant.TAG + tagId, Tag.class);
         if (tag == null) {
             Tag tagData = getOne(Wrappers.lambdaQuery(Tag.class).eq(Tag::getId, tagId));
             if (tagData != null) {
-                cacheUtils.setValue(RedisConstant.TAG + tagData.getId(), tagData);
+                CacheUtils.setValue(RedisConstant.TAG + tagData.getId(), tagData);
                 return tagData.getName();
             } else {
                 return "";
