@@ -31,6 +31,11 @@ public class FriendsInfo implements Serializable {
 	private String content;
 
 	/**
+	 * 评论开关
+	 */
+	private Boolean isCommentEnabled;
+
+	/**
 	* 文章作者
 	*/
 	@JsonSerialize(using = ToStringSerializer.class)
