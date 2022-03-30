@@ -5,10 +5,10 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
-import lombok.AllArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.experimental.Accessors;
+import lombok.AllArgsConstructor;
 
 import java.io.Serializable;
 import java.util.Date;
@@ -17,31 +17,22 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("moment")
-public class Moment implements Serializable {
+@TableName("friends_info")
+public class FriendsInfo implements Serializable {
+
 
 	@TableId(type = IdType.ASSIGN_ID)
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
 
 	/**
-	* 动态内容
+	* 内容
 	*/
 	private String content;
 
 	/**
-	* 是否公开
+	* 文章作者
 	*/
-	private Boolean isPublished;
-
-	/**
-	* 点赞数量
-	*/
-	private Integer likeCount;
-
-	/**
-	 * 动态作者
-	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long createUser;
 
@@ -49,6 +40,11 @@ public class Moment implements Serializable {
 	* 创建时间
 	*/
 	private Date createTime;
+
+	/**
+	* 更新时间
+	*/
+	private Date updateTime;
 
 	/**
 	* 是否删除

@@ -17,31 +17,42 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@TableName("moment")
-public class Moment implements Serializable {
+@TableName("friends")
+public class Friends implements Serializable {
+
 
 	@TableId(type = IdType.ASSIGN_ID)
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long id;
 
 	/**
-	* 动态内容
+	* 昵称
 	*/
-	private String content;
+	private String nickname;
 
 	/**
-	* 是否公开
+	* 描述
+	*/
+	private String description;
+
+	/**
+	* 站点
+	*/
+	private String website;
+
+	/**
+	* 头像
+	*/
+	private String avatar;
+
+	/**
+	* 公开或隐藏
 	*/
 	private Boolean isPublished;
 
 	/**
-	* 点赞数量
+	* 文章作者
 	*/
-	private Integer likeCount;
-
-	/**
-	 * 动态作者
-	 */
 	@JsonSerialize(using = ToStringSerializer.class)
 	private Long createUser;
 
@@ -49,6 +60,11 @@ public class Moment implements Serializable {
 	* 创建时间
 	*/
 	private Date createTime;
+
+	/**
+	* 更新时间
+	*/
+	private Date updateTime;
 
 	/**
 	* 是否删除

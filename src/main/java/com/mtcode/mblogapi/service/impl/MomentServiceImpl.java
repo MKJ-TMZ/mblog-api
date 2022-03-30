@@ -6,6 +6,7 @@ import com.mtcode.mblogapi.exception.NullException;
 import com.mtcode.mblogapi.exception.ParameterException;
 import com.mtcode.mblogapi.mapper.MomentMapper;
 import com.mtcode.mblogapi.service.MomentService;
+import com.mtcode.mblogapi.util.Auth;
 import com.mtcode.mblogapi.util.Func;
 import org.springframework.stereotype.Service;
 
@@ -26,7 +27,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
 
             Date date = new Date();
             if (moment.getId() == null) {
-                moment.setCreateTime(date);
+                moment.setCreateTime(date).setCreateUser(Auth.getUserId());
                 save(moment);
             } else {
                 moment.setCreateTime(date);
@@ -42,9 +43,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
         if (moment != null && moment.getId() != null) {
             updateById(moment);
         } else {
-
             throw new ParameterException("参数错误");
-
         }
     }
 

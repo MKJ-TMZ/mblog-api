@@ -63,8 +63,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
             Date date = new Date();
             if (blogVO.getId() == null) {
-                blogVO.setCreateTime(date);
-                blogVO.setCreateUser(Auth.getUserId());
+                blogVO.setCreateTime(date).setCreateUser(Auth.getUserId());
                 save(blogVO);
             } else {
                 blogVO.setUpdateTime(date);
