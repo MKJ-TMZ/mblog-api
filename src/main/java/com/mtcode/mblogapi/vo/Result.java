@@ -22,6 +22,16 @@ public class Result {
         this.msg = msg;
     }
 
+    public Result(boolean result) {
+        if (result) {
+            this.code = 200;
+            this.msg = "请求成功";
+        } else {
+            this.code = 400;
+            this.msg = "失败";
+        }
+    }
+
     public static Result ok(String msg, Object data) {
         return new Result(200, msg, data);
     }
@@ -36,6 +46,22 @@ public class Result {
 
     public static Result ok(Object data) {
         return new Result(200, "请求成功", data);
+    }
+
+    public static Result fail(String msg, Object data) {
+        return new Result(400, msg, data);
+    }
+
+    public static Result fail(String msg) {
+        return new Result(400, msg);
+    }
+
+    public static Result fail() {
+        return new Result(400, "失败");
+    }
+
+    public static Result fail(Object data) {
+        return new Result(400, "失败", data);
     }
 
     public static Result error(String msg) {

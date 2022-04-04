@@ -36,11 +36,6 @@ public class CategoryAdminController {
 
     @DeleteMapping("/delete/{id}")
     public Result delete(@PathVariable("id") Long id) {
-        boolean removeResult = categoryService.removeById(id);
-        if (removeResult) {
-            return Result.ok();
-        } else {
-            return Result.create(400, "删除失败");
-        }
+        return new Result(categoryService.removeById(id));
     }
 }

@@ -14,7 +14,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/admin/about")
 @AllArgsConstructor
-public class AboutController {
+public class AboutAdminController {
 
     private final AboutService aboutService;
 
