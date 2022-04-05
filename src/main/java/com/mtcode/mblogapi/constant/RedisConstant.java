@@ -8,4 +8,6 @@ public interface RedisConstant {
     public final String TAG = "tag:";
 
     public final String CATEGORY = "category:";
+
+    public final String SETTING = "setting:";
 }

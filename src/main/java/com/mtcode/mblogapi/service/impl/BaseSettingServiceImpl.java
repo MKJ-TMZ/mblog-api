@@ -1,11 +1,13 @@
 package com.mtcode.mblogapi.service.impl;
 
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mtcode.mblogapi.constant.RedisConstant;
 import com.mtcode.mblogapi.entity.BaseSetting;
 import com.mtcode.mblogapi.exception.ParameterException;
 import com.mtcode.mblogapi.mapper.BaseSettingMapper;
 import com.mtcode.mblogapi.service.BaseSettingService;
 import com.mtcode.mblogapi.util.Auth;
+import com.mtcode.mblogapi.util.CacheUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -24,9 +26,11 @@ public class BaseSettingServiceImpl extends ServiceImpl<BaseSettingMapper, BaseS
             if (baseSetting.getId() == null) {
                 baseSetting.setCreateTime(new Date()).setCreateUser(Auth.getUserId());
                 result = save(baseSetting);
+                CacheUtils.delete(RedisConstant.SETTING + "base");
             } else {
                 baseSetting.setUpdateTime(new Date());
                 result = updateById(baseSetting);
+                CacheUtils.delete(RedisConstant.SETTING + "base");
             }
             return result;
         } else {

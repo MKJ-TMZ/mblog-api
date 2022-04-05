@@ -1,14 +1,10 @@
 package com.mtcode.mblogapi.util;
 
-import lombok.AllArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
-
-import static com.mtcode.mblogapi.util.JacksonUtils.readValue;
-import static com.mtcode.mblogapi.util.JacksonUtils.writeValueAsString;
 
 /**
  * @author TangMingZhang
@@ -31,7 +27,7 @@ public class CacheUtils {
      * @param value value
      */
     public static void setValue(String key, Object value) {
-        redisTemplate.opsForValue().set(key, Objects.requireNonNull(writeValueAsString(value)));
+        redisTemplate.opsForValue().set(key, Objects.requireNonNull(JacksonUtils.writeValueAsString(value)));
     }
 
     /**
@@ -47,7 +43,17 @@ public class CacheUtils {
         if (Func.isEmptyAsString(value)) {
             return null;
         } else {
-            return readValue((String) redisTemplate.opsForValue().get(key), valueType);
+            return JacksonUtils.readValue((String) redisTemplate.opsForValue().get(key), valueType);
         }
+    }
+
+    /**
+     * 删除缓存中的数据
+     *
+     * @param key key
+     * @return 结果
+     */
+    public static boolean delete(String key) {
+        return Boolean.TRUE.equals(redisTemplate.delete(key));
     }
 }
