@@ -56,9 +56,9 @@ public class ProfileSetting implements Serializable {
 	private String biliUrl;
 
 	/**
-	* 网易云地址
+	* bangumi地址
 	*/
-	private String neteaseUrl;
+	private String bangumiUrl;
 
 	/**
 	* 邮箱地址

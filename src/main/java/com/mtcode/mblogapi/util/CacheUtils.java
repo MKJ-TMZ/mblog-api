@@ -5,6 +5,7 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.stereotype.Component;
 
 import java.util.Objects;
+import java.util.concurrent.TimeUnit;
 
 /**
  * @author TangMingZhang
@@ -27,7 +28,7 @@ public class CacheUtils {
      * @param value value
      */
     public static void setValue(String key, Object value) {
-        redisTemplate.opsForValue().set(key, Objects.requireNonNull(JacksonUtils.writeValueAsString(value)));
+        redisTemplate.opsForValue().set(key, Objects.requireNonNull(JacksonUtils.writeValueAsString(value)), 7, TimeUnit.DAYS);
     }
 
     /**

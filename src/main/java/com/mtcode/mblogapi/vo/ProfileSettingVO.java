@@ -1,30 +1,23 @@
 package com.mtcode.mblogapi.vo;
 
-import com.mtcode.mblogapi.entity.Blog;
+import com.mtcode.mblogapi.entity.ProfileSetting;
+import com.mtcode.mblogapi.entity.ProfileSettingCustom;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
-import java.util.Set;
+import java.util.List;
 
 /**
  * @author TangMingZhang
- * @date 2022/3/20
+ * @date 2022/4/6
  */
 @EqualsAndHashCode(callSuper = true)
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class BlogVO extends Blog {
+public class ProfileSettingVO extends ProfileSetting {
 
-    /**
-     * 分类名称
-     */
-    private String categoryName;
-
-    /**
-     * 标签名称
-     */
-    private Set<String> tagNameSet;
+    List<ProfileSettingCustom> customList;
 }

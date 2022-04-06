@@ -12,7 +12,7 @@ import org.mapstruct.factory.Mappers;
 @Mapper
 public interface BlogConverter {
 
-    BlogConverter INSTANCE = Mappers.getMapper( BlogConverter.class );
+    BlogConverter INSTANCE = Mappers.getMapper(BlogConverter.class);
 
     BlogVO blogToBlogVO(Blog blog);
 }
