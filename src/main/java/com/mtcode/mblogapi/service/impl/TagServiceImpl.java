@@ -51,6 +51,10 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
                 lackTagList.add(tag);
             }
             saveBatch(lackTagList);
+            for (Tag lackTag : lackTagList) {
+                CacheUtils.delete(RedisConstant.TAG + lackTag.getId());
+            }
+            CacheUtils.delete(RedisConstant.TAG + "list");
         }
 
         // 将已有的tag集合和没有的tag集合合并返回
@@ -89,8 +93,24 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
             } else {
                 updateById(tag);
             }
+            CacheUtils.delete(RedisConstant.TAG + "list");
+            CacheUtils.delete(RedisConstant.TAG + tag.getId());
         } else {
             throw new ParameterException("参数错误");
+        }
+    }
+
+    @Override
+    public List<Tag> getTagsByBlogId(Long id) {
+        if (id != null) {
+            List<Tag> tagList;
+            tagList = baseMapper.selectTagsByBlogId(id);
+            if (tagList == null) {
+                tagList = new ArrayList<>();
+            }
+            return tagList;
+        } else {
+            return new ArrayList<>();
         }
     }
 }

@@ -48,8 +48,25 @@ public class CategoryServiceImpl extends ServiceImpl<CategoryMapper, Category> i
             } else {
                 updateById(category);
             }
+            CacheUtils.delete(RedisConstant.CATEGORY + "list");
+            CacheUtils.delete(RedisConstant.CATEGORY + category.getId());
         } else {
             throw new ParameterException("参数错误");
+        }
+    }
+
+    @Override
+    public Category saveLackCategory(String categoryName) {
+        Category category = getOne(Wrappers.lambdaQuery(Category.class).eq(Category::getName, categoryName));
+        if (category == null) {
+            Category newCategory = new Category();
+            newCategory.setName(categoryName);
+            save(newCategory);
+            CacheUtils.delete(RedisConstant.CATEGORY + "list");
+            CacheUtils.delete(RedisConstant.CATEGORY + newCategory.getId());
+            return newCategory;
+        } else {
+            return category;
         }
     }
 }

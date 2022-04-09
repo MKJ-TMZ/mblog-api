@@ -34,7 +34,6 @@ public class Tag implements Serializable {
      */
     private String color;
 
-
     /**
      * 是否删除
      */

@@ -23,4 +23,12 @@ public interface CategoryService extends IService<Category> {
      * @param category category实体类
      */
     void updateOrSaveCategory(Category category);
+
+    /**
+     * 保存数据库中没有的分类
+     *
+     * @param categoryName 分类名称
+     * @return category实体类
+     */
+    Category saveLackCategory(String categoryName);
 }

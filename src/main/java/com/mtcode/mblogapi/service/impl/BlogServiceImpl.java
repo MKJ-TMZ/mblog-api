@@ -49,16 +49,8 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
             // 保存分类id
             if (Func.isNotEmptyAsString(blogVO.getCategoryName())) {
-                Category category = categoryService
-                        .getOne(Wrappers.lambdaQuery(Category.class).eq(Category::getName, blogVO.getCategoryName()));
-                if (category == null) {
-                    Category newCategory = new Category();
-                    newCategory.setName(blogVO.getCategoryName());
-                    categoryService.save(newCategory);
-                    blogVO.setCategoryId(newCategory.getId());
-                } else {
-                    blogVO.setCategoryId(category.getId());
-                }
+                Category category = categoryService.saveLackCategory(blogVO.getCategoryName());
+                blogVO.setCategoryId(category.getId());
             }
 
             Date date = new Date();

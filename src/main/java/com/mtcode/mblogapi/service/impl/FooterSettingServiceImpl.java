@@ -29,11 +29,11 @@ public class FooterSettingServiceImpl extends ServiceImpl<FooterSettingMapper, F
                 footerSetting.setCreateTime(new Date())
                         .setCreateUser(Auth.getUserId());
                 result = save(footerSetting);
-                CacheUtils.delete(RedisConstant.SETTING + "footer");
+                CacheUtils.delete(RedisConstant.SETTING + "footer:list");
             } else {
                 footerSetting.setUpdateTime(new Date());
                 result = updateById(footerSetting);
-                CacheUtils.delete(RedisConstant.SETTING + "footer");
+                CacheUtils.delete(RedisConstant.SETTING + "footer:list");
             }
 
             return result;

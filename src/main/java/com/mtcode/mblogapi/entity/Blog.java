@@ -30,7 +30,7 @@ public class Blog implements Serializable {
     private String title;
 
     /**
-     * 封面图片，用于随机文章展示
+     * 封面图片
      */
     private String coverPic;
 

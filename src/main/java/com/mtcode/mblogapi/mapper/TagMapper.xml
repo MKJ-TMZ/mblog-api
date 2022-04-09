@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.mtcode.mblogapi.mapper.TagMapper">
+    <select id="selectTagsByBlogId" resultType="com.mtcode.mblogapi.entity.Tag">
+        SELECT t.*
+        FROM blog_tag bt
+        LEFT JOIN tag t on t.id = bt.tag_id AND t.is_delete = 0
+        WHERE bt.blog_id = #{id}
+    </select>
+</mapper>

@@ -26,12 +26,11 @@ public class BaseSettingServiceImpl extends ServiceImpl<BaseSettingMapper, BaseS
             if (baseSetting.getId() == null) {
                 baseSetting.setCreateTime(new Date()).setCreateUser(Auth.getUserId());
                 result = save(baseSetting);
-                CacheUtils.delete(RedisConstant.SETTING + "base");
             } else {
                 baseSetting.setUpdateTime(new Date());
                 result = updateById(baseSetting);
-                CacheUtils.delete(RedisConstant.SETTING + "base");
             }
+            CacheUtils.delete(RedisConstant.SETTING + "base");
             return result;
         } else {
             throw new ParameterException("参数错误");
