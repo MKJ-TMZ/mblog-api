@@ -5,10 +5,9 @@ import com.mtcode.mblogapi.service.TagService;
 import com.mtcode.mblogapi.vo.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
-
-import java.util.List;
 
 /**
  * @author TangMingZhang
@@ -23,8 +22,15 @@ public class TagController {
 
     @GetMapping("/list")
     public Result list() {
-        List<Tag> tagList = tagService.list();
+        return Result.ok(tagService.list());
+    }
 
-        return Result.ok(tagList);
+    @GetMapping("/{id}")
+    public Result getTag(@PathVariable("id") Long id) {
+        Tag tag = tagService.getTagById(id);
+        if (tag == null) {
+            return Result.fail("标签不存在");
+        }
+        return Result.ok(tag);
     }
 }

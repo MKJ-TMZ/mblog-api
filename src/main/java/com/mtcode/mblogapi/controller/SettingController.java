@@ -30,48 +30,22 @@ public class SettingController {
 
     private final BaseSettingService baseSettingService;
     private final ProfileSettingService profileSettingService;
-    private final ProfileSettingCustomService profileSettingCustomService;
     private final FooterSettingService footerSettingService;
     private final BlogService blogService;
 
     @GetMapping("/base")
     public Result getBase() {
-        BaseSetting baseSetting = CacheUtils.getValue(RedisConstant.SETTING + "base", BaseSetting.class);
-        if (baseSetting == null) {
-            BaseSetting baseSettingNow = baseSettingService.getOne(Wrappers.lambdaQuery());
-            CacheUtils.setValue(RedisConstant.SETTING + "base", baseSettingNow);
-            return Result.ok(baseSettingNow);
-        } else {
-            return Result.ok(baseSetting);
-        }
+        return Result.ok(baseSettingService.getBase());
     }
 
     @GetMapping("/profile")
     public Result getProfile() {
-        ProfileSetting profileSetting = profileSettingService.getOne(Wrappers.lambdaQuery());
-        ProfileSettingVO profileSettingVO = ProfileSettingConverter.INSTANCE.profileSettingToProfileSettingVO(profileSetting);
-        List<ProfileSettingCustom> customList = profileSettingCustomService.list();
-        if (customList == null) {
-            customList = new ArrayList<>();
-        }
-        profileSettingVO.setCustomList(customList);
-        return Result.ok(profileSettingVO);
+        return Result.ok(profileSettingService.getProfile());
     }
 
     @GetMapping("/footer")
     public Result getFooter() {
-        Object footerSettingListCache = CacheUtils.getValue(RedisConstant.SETTING + "footer:list", List.class);
-        List<FooterSetting> footerSettingList;
-        if (footerSettingListCache == null) {
-            footerSettingList = footerSettingService.list();
-            if (footerSettingList == null) {
-                footerSettingList = new ArrayList<>();
-            }
-            CacheUtils.setValue(RedisConstant.SETTING + "footer:list", footerSettingList);
-        } else {
-            footerSettingList = CastUtils.cast(footerSettingListCache);
-        }
-
+        List<FooterSetting> footerSettingList = footerSettingService.getFooter();
         List<Blog> blogList = blogService.list(Wrappers.lambdaQuery(Blog.class)
                 .eq(Blog::getIsPublished, true)
                 .orderByDesc(Blog::getCreateTime)

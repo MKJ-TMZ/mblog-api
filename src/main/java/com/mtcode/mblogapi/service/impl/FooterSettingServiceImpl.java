@@ -8,9 +8,12 @@ import com.mtcode.mblogapi.mapper.FooterSettingMapper;
 import com.mtcode.mblogapi.service.FooterSettingService;
 import com.mtcode.mblogapi.util.Auth;
 import com.mtcode.mblogapi.util.CacheUtils;
+import org.springframework.data.util.CastUtils;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 /**
  * @author TangMingZhang
@@ -37,6 +40,22 @@ public class FooterSettingServiceImpl extends ServiceImpl<FooterSettingMapper, F
             }
 
             return result;
+        }
+    }
+
+    @Override
+    public List<FooterSetting> getFooter() {
+        Object footerSettingListCache = CacheUtils.getValue(RedisConstant.SETTING + "footer:list", List.class);
+        List<FooterSetting> footerSettingList;
+        if (footerSettingListCache == null) {
+            footerSettingList = list();
+            if (footerSettingList == null) {
+                return new ArrayList<>();
+            }
+            CacheUtils.setValue(RedisConstant.SETTING + "footer:list", footerSettingList);
+            return footerSettingList;
+        } else {
+            return CastUtils.cast(footerSettingListCache);
         }
     }
 }

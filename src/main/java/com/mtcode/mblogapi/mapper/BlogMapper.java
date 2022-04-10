@@ -19,7 +19,17 @@ public interface BlogMapper extends BaseMapper<Blog> {
      * 分页查询
      *
      * @param query 分页参数
+     * @param blogVO 查询条件
      * @return list集合
      */
     List<BlogVO> selectPageVO(@Param("page") IPage<BlogVO> query, @Param("req") BlogVO blogVO);
+
+    /**
+     * 博客主页分页查询
+     *
+     * @param query 分页参数
+     * @param blog 查询条件
+     * @return list集合
+     */
+    List<BlogVO> selectHomePage(@Param("page") IPage<BlogVO> query, @Param("req") BlogVO blogVO);
 }

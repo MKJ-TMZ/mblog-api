@@ -11,4 +11,39 @@
             AND category_id = #{req.categoryId}
         </if>
     </select>
+
+    <select id="selectHomePage" resultType="com.mtcode.mblogapi.vo.BlogVO">
+        SELECT
+            blog.id,
+            blog.is_comment_enabled,
+            blog.update_time,
+            blog.title,
+            blog.view_count,
+            blog.is_recommend,
+            blog.category_id,
+            blog.read_time,
+            blog.create_user,
+            blog.create_time,
+            blog.is_delete,
+            blog.is_top,
+            blog.is_appreciation,
+            blog.cover_pic,
+            blog.words_count,
+            blog.is_draft,
+            blog.description,
+            blog.is_published,
+            category.name AS category_name
+        FROM blog
+        LEFT JOIN category ON category.id = blog.category_id
+        WHERE blog.is_delete = 0 AND blog.is_published = 1
+        <if test="req.tagId != null and req.tagId != ''">
+            AND blog.id IN (SELECT blog_id FROM blog_tag WHERE tag_id = #{req.tagId})
+        </if>
+        <if test="req.categoryId != null and req.categoryId != ''">
+            AND blog.category_id = #{req.categoryId}
+        </if>
+        ORDER BY
+        CASE WHEN blog.is_top = 1 then 0 else 1 end,
+        blog.create_time DESC
+    </select>
 </mapper>

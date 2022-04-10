@@ -4,10 +4,12 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.mtcode.mblogapi.constant.RedisConstant;
 import com.mtcode.mblogapi.converter.BlogConverter;
 import com.mtcode.mblogapi.entity.Blog;
 import com.mtcode.mblogapi.entity.BlogTag;
 import com.mtcode.mblogapi.entity.Category;
+import com.mtcode.mblogapi.entity.Tag;
 import com.mtcode.mblogapi.exception.NullException;
 import com.mtcode.mblogapi.exception.ParameterException;
 import com.mtcode.mblogapi.mapper.BlogMapper;
@@ -16,8 +18,11 @@ import com.mtcode.mblogapi.service.BlogTagService;
 import com.mtcode.mblogapi.service.CategoryService;
 import com.mtcode.mblogapi.service.TagService;
 import com.mtcode.mblogapi.util.Auth;
+import com.mtcode.mblogapi.util.CacheUtils;
 import com.mtcode.mblogapi.util.Func;
+import com.mtcode.mblogapi.util.MarkdownUtils;
 import com.mtcode.mblogapi.vo.BlogVO;
+import com.mtcode.mblogapi.vo.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -61,6 +66,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
                 blogVO.setUpdateTime(date);
                 updateById(blogVO);
             }
+            CacheUtils.delete(RedisConstant.BLOG + blogVO.getId());
 
             // 保存博客标签关联信息
             blogTagService.saveBlogTagList(blogVO.getId(), blogVO.getTagNameSet());
@@ -84,6 +90,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     public void update(Blog blog) {
         if (blog != null && blog.getId() != null) {
             updateById(blog);
+            CacheUtils.delete(RedisConstant.BLOG + blog.getId());
         } else {
             throw new ParameterException("参数错误");
         }
@@ -114,5 +121,43 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         }
 
         return blogVO;
+    }
+
+    @Override
+    public IPage<BlogVO> homePage(Page<BlogVO> query, BlogVO blogVO) {
+        List<BlogVO> blogVOList = baseMapper.selectHomePage(query, blogVO);
+        if (blogVOList != null && blogVOList.size() > 0) {
+            for (BlogVO blog : blogVOList) {
+                List<Tag> tagList = tagService.getTagsByBlogId(blog.getId());
+                blog.setTagList(tagList);
+            }
+        }
+        return query.setRecords(blogVOList);
+    }
+
+    @Override
+    public BlogVO homeDetail(Long id) {
+        BlogVO blogVOCache = CacheUtils.getValue(RedisConstant.BLOG + id, BlogVO.class);
+        if (blogVOCache == null) {
+            Blog blog = getById(id);
+            if (blog == null) {
+                return null;
+            } else {
+                BlogVO blogVO = BlogConverter.INSTANCE.blogToBlogVO(blog);
+                blogVO.setContent(MarkdownUtils.markdownToHtml(blogVO.getContent()));
+                blogVO.setDescription(MarkdownUtils.markdownToHtml(blogVO.getDescription()));
+                Category category = categoryService.getById(blogVO.getCategoryId());
+                if (category != null) {
+                    blogVO.setCategoryName(category.getName());
+                }
+                List<Tag> tagList = tagService.getTagsByBlogId(id);
+                blogVO.setTagList(tagList);
+                CacheUtils.setValue(RedisConstant.BLOG + id, blogVO);
+
+                return blogVO;
+            }
+        } else {
+            return blogVOCache;
+        }
     }
 }

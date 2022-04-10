@@ -42,4 +42,21 @@ public interface BlogService extends IService<Blog> {
      * @return blogVO实体类
      */
     BlogVO detail(Long id);
+
+    /**
+     * 博客主页分页查询
+     *
+     * @param query 分页参数
+     * @param blogVO 查询条件
+     * @return 分页结果
+     */
+    IPage<BlogVO> homePage(Page<BlogVO> query, BlogVO blogVO);
+
+    /**
+     * 主页博客详情
+     *
+     * @param id 博客id
+     * @return blogVO实体类
+     */
+    BlogVO homeDetail(Long id);
 }

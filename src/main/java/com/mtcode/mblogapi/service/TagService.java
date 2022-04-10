@@ -35,5 +35,19 @@ public interface TagService extends IService<Tag> {
      */
     void updateOrSaveTag(Tag tag);
 
+    /**
+     * 查询博客的标签
+     *
+     * @param id 博客id
+     * @return 标签list
+     */
     List<Tag> getTagsByBlogId(Long id);
+
+    /**
+     * 通过id获取标签
+     *
+     * @param id 标签id
+     * @return 标签实体类
+     */
+    Tag getTagById(Long id);
 }

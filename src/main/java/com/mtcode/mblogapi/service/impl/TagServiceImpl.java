@@ -113,4 +113,19 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
             return new ArrayList<>();
         }
     }
+
+    @Override
+    public Tag getTagById(Long id) {
+        Tag tagCache = CacheUtils.getValue(RedisConstant.TAG + id, Tag.class);
+        if (tagCache == null) {
+            Tag tag = getById(id);
+            if (tag == null) {
+                return null;
+            }
+            CacheUtils.setValue(RedisConstant.TAG + id, tag);
+            return tag;
+        } else {
+            return tagCache;
+        }
+    }
 }

@@ -5,6 +5,7 @@ import com.mtcode.mblogapi.service.CategoryService;
 import com.mtcode.mblogapi.vo.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,5 +27,10 @@ public class CategoryController {
         List<Category> categoryList = categoryService.list();
 
         return Result.ok(categoryList);
+    }
+
+    @GetMapping("/{id}")
+    public Result getCategory(@PathVariable("id") Long id) {
+        return Result.ok("成功", categoryService.getCategoryName(id));
     }
 }

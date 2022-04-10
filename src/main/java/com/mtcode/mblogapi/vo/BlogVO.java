@@ -35,4 +35,9 @@ public class BlogVO extends Blog {
      * 标签
      */
     private List<Tag> tagList;
+
+    /**
+     * 标签id（查询条件）
+     */
+    private Long tagId;
 }
