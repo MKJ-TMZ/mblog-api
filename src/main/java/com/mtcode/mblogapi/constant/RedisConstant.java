@@ -12,4 +12,6 @@ public interface RedisConstant {
     public final String SETTING = "setting:";
 
     public final String BLOG = "blog:";
+
+    public final String VIEW_COUNT = "viewCount:";
 }
