@@ -17,9 +17,9 @@ import org.springframework.stereotype.Component;
 public class BlogAspect {
 
     @Pointcut("execution(* com.mtcode.mblogapi.controller.BlogController.detail(..))")
-    public void Detail() {};
+    public void detail() {};
 
-    @AfterReturning("Detail()")
+    @AfterReturning("detail()")
     public void detailAfterReturningAdvice(JoinPoint joinPoint) {
         Object[] args = joinPoint.getArgs();
         Long id = (Long) args[0];
