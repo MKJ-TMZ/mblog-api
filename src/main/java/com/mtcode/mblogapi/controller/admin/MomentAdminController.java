@@ -1,5 +1,6 @@
 package com.mtcode.mblogapi.controller.admin;
 
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.mtcode.mblogapi.entity.Moment;
 import com.mtcode.mblogapi.service.MomentService;
@@ -14,7 +15,7 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping("/admin/moment")
 @AllArgsConstructor
-public class MomentController {
+public class MomentAdminController {
 
     private final MomentService momentService;
 
@@ -32,7 +33,8 @@ public class MomentController {
 
     @GetMapping("/page")
     public Result page(Page<Moment> query) {
-        return Result.ok(momentService.page(query));
+        return Result.ok(momentService.page(query,
+                Wrappers.lambdaQuery(Moment.class).orderByDesc(Moment::getCreateTime)));
     }
 
     @DeleteMapping("/delete/{id}")

@@ -35,6 +35,11 @@ public class Moment implements Serializable {
 	private Boolean isPublished;
 
 	/**
+	* 是否可复制
+	*/
+	private Boolean isCopyable;
+
+	/**
 	* 点赞数量
 	*/
 	private Integer likeCount;
@@ -49,6 +54,11 @@ public class Moment implements Serializable {
 	* 创建时间
 	*/
 	private Date createTime;
+
+	/**
+	* 创建时间
+	*/
+	private Date updateTime;
 
 	/**
 	* 是否删除

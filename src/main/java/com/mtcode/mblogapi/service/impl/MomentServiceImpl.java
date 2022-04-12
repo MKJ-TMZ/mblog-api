@@ -1,5 +1,8 @@
 package com.mtcode.mblogapi.service.impl;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.mtcode.mblogapi.entity.Moment;
 import com.mtcode.mblogapi.exception.NullException;
@@ -8,6 +11,7 @@ import com.mtcode.mblogapi.mapper.MomentMapper;
 import com.mtcode.mblogapi.service.MomentService;
 import com.mtcode.mblogapi.util.Auth;
 import com.mtcode.mblogapi.util.Func;
+import com.mtcode.mblogapi.util.MarkdownUtils;
 import org.springframework.stereotype.Service;
 
 import java.util.Date;
@@ -30,7 +34,7 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
                 moment.setCreateTime(date).setCreateUser(Auth.getUserId());
                 save(moment);
             } else {
-                moment.setCreateTime(date);
+                moment.setUpdateTime(date);
                 updateById(moment);
             }
         } else {
@@ -59,5 +63,18 @@ public class MomentServiceImpl extends ServiceImpl<MomentMapper, Moment> impleme
         }
 
         return moment;
+    }
+
+    @Override
+    public IPage<Moment> homePage(Page<Moment> query) {
+        Page<Moment> page = page(query, Wrappers.lambdaQuery(Moment.class)
+                .eq(Moment::getIsPublished, true)
+                .orderByDesc(Moment::getCreateTime));
+        if (page.getRecords() != null && page.getRecords().size() > 0) {
+            for (Moment moment : page.getRecords()) {
+                moment.setContent(MarkdownUtils.markdownToHtml(moment.getContent()));
+            }
+        }
+        return page;
     }
 }

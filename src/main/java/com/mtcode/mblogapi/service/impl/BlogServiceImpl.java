@@ -128,6 +128,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         List<BlogVO> blogVOList = baseMapper.selectHomePage(query, blogVO);
         if (blogVOList != null && blogVOList.size() > 0) {
             for (BlogVO blog : blogVOList) {
+                blog.setDescription(MarkdownUtils.markdownToHtml(blog.getDescription()));
                 List<Tag> tagList = tagService.getTagsByBlogId(blog.getId());
                 blog.setTagList(tagList);
             }
