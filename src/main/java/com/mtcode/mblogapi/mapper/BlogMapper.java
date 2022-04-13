@@ -28,8 +28,16 @@ public interface BlogMapper extends BaseMapper<Blog> {
      * 博客主页分页查询
      *
      * @param query 分页参数
-     * @param blog 查询条件
+     * @param blogVO 查询条件
      * @return list集合
      */
     List<BlogVO> selectHomePage(@Param("page") IPage<BlogVO> query, @Param("req") BlogVO blogVO);
+
+    /**
+     * 通过标题获取博客列表
+     *
+     * @param query 搜索条件
+     * @return blogList
+     */
+    List<Blog> search(@Param("query") String query);
 }

@@ -52,4 +52,19 @@ public class BlogController {
 
         return Result.ok(iPage);
     }
+
+    @GetMapping("/archives")
+    public Result archives() {
+        return Result.ok(blogService.archives());
+    }
+
+    @GetMapping("/count")
+    public Result count() {
+        return Result.ok(blogService.count(Wrappers.lambdaQuery(Blog.class).eq(Blog::getIsPublished, true)));
+    }
+
+    @GetMapping("/search/{query}")
+    public Result search(@PathVariable("query") String query) {
+        return Result.ok(blogService.search(query));
+    }
 }

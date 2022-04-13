@@ -27,10 +27,9 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.text.SimpleDateFormat;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author TangMingZhang
@@ -160,5 +159,43 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
         } else {
             return blogVOCache;
         }
+    }
+
+    @Override
+    public List<Map<String, Object>> archives() {
+        List<BlogVO> blogList = baseMapper.selectHomePage(null, new BlogVO());
+        Calendar calender = Calendar.getInstance();
+        // 通过年月分组
+        Map<Integer, List<Blog>> groupByMonth = blogList.stream().collect(Collectors.groupingBy(blog -> {
+            calender.setTime(blog.getCreateTime());
+            int year = calender.get(Calendar.YEAR);
+            int month = calender.get(Calendar.MONTH) + 1;
+            if (month < 10) {
+                return Integer.parseInt(year + "0" + month);
+            } else {
+                return Integer.parseInt(year + "" + month);
+            }
+        }));
+        List<Map<String, Object>> result = new ArrayList<>();
+        // 通过年月排序并存入list
+        for (Map.Entry<Integer, List<Blog>> entry : groupByMonth.entrySet()) {
+            HashMap<String, Object> blogGroup = new HashMap<>();
+            blogGroup.put("yearMonth", entry.getKey());
+            List<Blog> blogs = entry.getValue();
+            blogs = blogs.stream()
+                    .sorted(Comparator.comparing(Blog::getCreateTime).reversed()).collect(Collectors.toList());
+            blogGroup.put("group", blogs);
+            result.add(blogGroup);
+        }
+        result.sort(Comparator.comparing(map -> (Integer) map.get("yearMonth")));
+        Collections.reverse(result);
+        return result;
+    }
+
+    @Override
+    public List<Blog> search(String query) {
+        List<Blog> blogs = baseMapper.search(query);
+        blogs.forEach(blog -> blog.setDescription(MarkdownUtils.markdownToHtml(blog.getDescription())));
+        return blogs;
     }
 }
