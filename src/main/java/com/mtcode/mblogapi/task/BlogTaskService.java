@@ -6,6 +6,7 @@ import com.mtcode.mblogapi.entity.Blog;
 import com.mtcode.mblogapi.service.BlogService;
 import com.mtcode.mblogapi.util.CacheUtils;
 import com.mtcode.mblogapi.util.Func;
+import com.mtcode.mblogapi.util.MarkdownUtils;
 import com.mtcode.mblogapi.vo.BlogVO;
 import lombok.AllArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -35,12 +36,16 @@ public class BlogTaskService {
                     CacheUtils.delete(key);
                     String[] keySplit = key.split(":");
                     Long id = Long.valueOf(keySplit[keySplit.length - 1]);
-                    BlogVO blogVO = blogService.homeDetail(id);
-                    if (blogVO != null && viewCount != null) {
-                        blogVO.setViewCount(blogVO.getViewCount() + viewCount);
+                    BlogVO blogVO = blogService.detail(id);
+                    if (blogVO != null) {
+                        if (viewCount != null && viewCount > 0) {
+                            blogVO.setViewCount(blogVO.getViewCount() + viewCount);
+                        }
+                        blogService.updateById(blogVO);
+                        blogVO.setContent(MarkdownUtils.markdownToHtml(blogVO.getContent()));
+                        blogVO.setDescription(MarkdownUtils.markdownToHtml(blogVO.getDescription()));
+                        CacheUtils.setValue(RedisConstant.BLOG + id, blogVO);
                     }
-                    blogService.updateById(blogVO);
-                    CacheUtils.setValue(RedisConstant.BLOG + id, blogVO);
                 }
 
             }
