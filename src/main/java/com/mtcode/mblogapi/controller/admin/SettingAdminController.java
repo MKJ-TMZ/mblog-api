@@ -2,6 +2,7 @@ package com.mtcode.mblogapi.controller.admin;
 
 import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mtcode.mblogapi.constant.RedisConstant;
 import com.mtcode.mblogapi.entity.BaseSetting;
 import com.mtcode.mblogapi.entity.FooterSetting;
 import com.mtcode.mblogapi.entity.ProfileSetting;
@@ -10,6 +11,7 @@ import com.mtcode.mblogapi.service.BaseSettingService;
 import com.mtcode.mblogapi.service.FooterSettingService;
 import com.mtcode.mblogapi.service.ProfileSettingCustomService;
 import com.mtcode.mblogapi.service.ProfileSettingService;
+import com.mtcode.mblogapi.util.CacheUtils;
 import com.mtcode.mblogapi.vo.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -78,7 +80,11 @@ public class SettingAdminController {
 
     @DeleteMapping("/footer/{id}")
     public Result footerSave(@PathVariable Long id) {
-        return new Result(footerSettingService.removeById(id));
+        boolean result = footerSettingService.removeById(id);
+        if (result) {
+            CacheUtils.delete(RedisConstant.SETTING + "footer:list");
+        }
+        return new Result(result);
     }
 
     @GetMapping("/footer/page")

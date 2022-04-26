@@ -1,8 +1,10 @@
 package com.mtcode.mblogapi.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mtcode.mblogapi.constant.RedisConstant;
 import com.mtcode.mblogapi.entity.Category;
 import com.mtcode.mblogapi.service.CategoryService;
+import com.mtcode.mblogapi.util.CacheUtils;
 import com.mtcode.mblogapi.vo.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -36,6 +38,11 @@ public class CategoryAdminController {
 
     @DeleteMapping("/{id}")
     public Result delete(@PathVariable("id") Long id) {
-        return new Result(categoryService.removeById(id));
+        boolean result = categoryService.removeById(id);
+        if (result) {
+            CacheUtils.delete(RedisConstant.CATEGORY + "list");
+            CacheUtils.delete(RedisConstant.CATEGORY + id);
+        }
+        return new Result(result);
     }
 }

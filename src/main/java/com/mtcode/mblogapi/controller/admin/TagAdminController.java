@@ -1,8 +1,10 @@
 package com.mtcode.mblogapi.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mtcode.mblogapi.constant.RedisConstant;
 import com.mtcode.mblogapi.entity.Tag;
 import com.mtcode.mblogapi.service.TagService;
+import com.mtcode.mblogapi.util.CacheUtils;
 import com.mtcode.mblogapi.vo.Result;
 import lombok.AllArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -38,6 +40,8 @@ public class TagAdminController {
     public Result delete(@PathVariable("id") Long id) {
         boolean removeResult = tagService.removeById(id);
         if (removeResult) {
+            CacheUtils.delete(RedisConstant.TAG + "list");
+            CacheUtils.delete(RedisConstant.TAG + id);
             return Result.ok();
         } else {
             return Result.create(400, "删除失败");

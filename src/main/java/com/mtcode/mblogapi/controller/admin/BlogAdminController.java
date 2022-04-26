@@ -1,8 +1,10 @@
 package com.mtcode.mblogapi.controller.admin;
 
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
+import com.mtcode.mblogapi.constant.RedisConstant;
 import com.mtcode.mblogapi.entity.Blog;
 import com.mtcode.mblogapi.service.BlogService;
+import com.mtcode.mblogapi.util.CacheUtils;
 import com.mtcode.mblogapi.vo.BlogVO;
 import com.mtcode.mblogapi.vo.Result;
 import lombok.AllArgsConstructor;
@@ -40,10 +42,9 @@ public class BlogAdminController {
     public Result delete(@PathVariable("id") Long id) {
         boolean removeResult = blogService.removeById(id);
         if (removeResult) {
-            return Result.ok();
-        } else {
-            return Result.create(400, "删除失败");
+            CacheUtils.delete(RedisConstant.BLOG + id);
         }
+        return new Result(removeResult);
     }
 
     @GetMapping("/{id}")

@@ -12,10 +12,7 @@ import com.mtcode.mblogapi.util.Func;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * @author TangMingZhang
@@ -43,11 +40,28 @@ public class TagServiceImpl extends ServiceImpl<TagMapper, Tag> implements TagSe
         tagNameSet.removeIf(tagName -> !existentTagNameSet.add(tagName));
         // 新增数据库中没有的tag
         List<Tag> lackTagList = new ArrayList<>();
+        String[] colors = {
+                "red",
+                "orange",
+                "yellow",
+                "olive",
+                "green",
+                "teal",
+                "blue",
+                "violet",
+                "purple",
+                "pink",
+                "brown",
+                "grey",
+                "black"
+        };
         if (tagNameSet.size() > 0) {
+            Random random = new Random();
             for (String tagName : tagNameSet) {
+                int colorNo = random.nextInt(colors.length - 1);
                 Tag tag = new Tag();
                 tag.setName(tagName);
-                tag.setColor("teal");
+                tag.setColor(colors[colorNo]);
                 lackTagList.add(tag);
             }
             saveBatch(lackTagList);
