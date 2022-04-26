@@ -18,13 +18,13 @@ public class AboutAdminController {
 
     private final AboutService aboutService;
 
-    @PostMapping("/save")
+    @PostMapping("")
     public Result save(@RequestBody About about) {
         aboutService.updateOrSaveAbout(about);
         return Result.ok();
     }
 
-    @GetMapping("/detail")
+    @GetMapping("")
     public Result detail() {
         About about = aboutService.getOne(Wrappers.lambdaQuery());
         if (about == null) {

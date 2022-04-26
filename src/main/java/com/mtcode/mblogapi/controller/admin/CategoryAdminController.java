@@ -28,13 +28,13 @@ public class CategoryAdminController {
         return Result.ok(categoryService.page(query));
     }
 
-    @PostMapping("/save")
+    @PostMapping("")
     public Result save(@RequestBody Category category) {
         categoryService.updateOrSaveCategory(category);
         return Result.ok();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public Result delete(@PathVariable("id") Long id) {
         return new Result(categoryService.removeById(id));
     }

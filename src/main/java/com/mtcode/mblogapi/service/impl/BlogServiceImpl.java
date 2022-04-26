@@ -47,7 +47,9 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
     @Transactional(rollbackFor = Exception.class)
     public void updateOrSaveBlog(BlogVO blogVO) {
         if (blogVO != null) {
-            if (!blogVO.getIsDraft() && Func.isEmptyAsString(blogVO.getTitle(), blogVO.getContent(), blogVO.getDescription())) {
+            if (blogVO.getIsDraft() != null
+                    && !blogVO.getIsDraft()
+                    && Func.isEmptyAsString(blogVO.getTitle(), blogVO.getContent(), blogVO.getDescription())) {
                 throw new ParameterException("参数错误");
             }
 

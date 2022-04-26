@@ -19,13 +19,13 @@ public class MomentAdminController {
 
     private final MomentService momentService;
 
-    @PostMapping("/save")
+    @PostMapping("")
     public Result saveBlog(@RequestBody Moment moment) {
         momentService.updateOrSaveMoment(moment);
         return Result.ok();
     }
 
-    @PostMapping("/update")
+    @PutMapping("")
     public Result update(@RequestBody Moment moment) {
         momentService.update(moment);
         return Result.ok();
@@ -37,7 +37,7 @@ public class MomentAdminController {
                 Wrappers.lambdaQuery(Moment.class).orderByDesc(Moment::getCreateTime)));
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public Result delete(@PathVariable("id") Long id) {
         boolean removeResult = momentService.removeById(id);
         if (removeResult) {
@@ -47,7 +47,7 @@ public class MomentAdminController {
         }
     }
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     public Result detail(@PathVariable("id") Long id) {
         return Result.ok(momentService.detail(id));
     }

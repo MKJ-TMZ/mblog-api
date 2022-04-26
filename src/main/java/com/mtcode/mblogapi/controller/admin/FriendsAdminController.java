@@ -27,13 +27,13 @@ public class FriendsAdminController {
         return Result.ok(friendsService.page(query));
     }
 
-    @PostMapping("/save")
+    @PostMapping("")
     public Result save(@RequestBody Friends friends) {
         friendsService.updateOrSaveFriends(friends);
         return Result.ok();
     }
 
-    @PostMapping("/update")
+    @PutMapping("")
     public Result update(@RequestBody Friends friends) {
         boolean result = friendsService.updateById(friends);
         if (result) {
@@ -43,7 +43,7 @@ public class FriendsAdminController {
         }
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public Result delete(@PathVariable("id") Long id) {
         boolean result = friendsService.removeById(id);
         if (result) {
@@ -53,13 +53,13 @@ public class FriendsAdminController {
         }
     }
 
-    @PostMapping("/info/save")
+    @PostMapping("/info")
     public Result save(@RequestBody FriendsInfo friendsInfo) {
         friendsInfoService.updateOrSaveFriendsInfo(friendsInfo);
         return Result.ok();
     }
 
-    @GetMapping("/info/detail")
+    @GetMapping("/info")
     public Result detail() {
         FriendsInfo friendsInfo = friendsInfoService.getOne(Wrappers.lambdaQuery());
         if (friendsInfo == null) {

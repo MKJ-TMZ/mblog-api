@@ -19,7 +19,7 @@ public class BlogAdminController {
 
     private final BlogService blogService;
 
-    @PostMapping("/save")
+    @PostMapping("")
     public Result saveBlog(@RequestBody BlogVO blogVO) {
         blogService.updateOrSaveBlog(blogVO);
         return Result.ok();
@@ -36,7 +36,7 @@ public class BlogAdminController {
         return Result.ok();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public Result delete(@PathVariable("id") Long id) {
         boolean removeResult = blogService.removeById(id);
         if (removeResult) {
@@ -46,7 +46,7 @@ public class BlogAdminController {
         }
     }
 
-    @GetMapping("/detail/{id}")
+    @GetMapping("/{id}")
     public Result detail(@PathVariable("id") Long id) {
         return Result.ok(blogService.detail(id));
     }

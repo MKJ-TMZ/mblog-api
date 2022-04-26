@@ -28,13 +28,13 @@ public class TagAdminController {
         return Result.ok(tagService.page(query));
     }
 
-    @PostMapping("/save")
+    @PostMapping("")
     public Result save(@RequestBody Tag tag) {
         tagService.updateOrSaveTag(tag);
         return Result.ok();
     }
 
-    @DeleteMapping("/delete/{id}")
+    @DeleteMapping("/{id}")
     public Result delete(@PathVariable("id") Long id) {
         boolean removeResult = tagService.removeById(id);
         if (removeResult) {
