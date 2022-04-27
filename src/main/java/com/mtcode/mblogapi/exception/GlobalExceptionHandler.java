@@ -27,8 +27,15 @@ public class GlobalExceptionHandler {
         return Result.create(401, e.getMessage());
     }
 
+    @ExceptionHandler(value = ServiceException.class)
+    public Result ServiceException(ServiceException e) {
+        return Result.create(400, e.getMessage());
+    }
+
     @ExceptionHandler(value = NullException.class)
     public Result OtherException(NullException e) {
         return Result.create(400, e.getMessage());
     }
+
+
 }
