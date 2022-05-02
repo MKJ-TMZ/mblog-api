@@ -21,7 +21,7 @@ import java.util.Map;
 @Service
 public class UploadServiceImpl implements UploadService {
 
-    private final String GITHUB_TOKEN = "token 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";
+    private final String GITHUB_TOKEN = "token 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";
 
     @Override
     public String uploadToGitHub(String base64, String name) {

@@ -28,8 +28,7 @@ public class BlogController {
         List<Blog> blogList = blogService.list(Wrappers.lambdaQuery(Blog.class)
                         .eq(Blog::getIsPublished, true)
                         .eq(Blog::getIsRecommend, true)
-                        .orderByDesc(Blog::getCreateTime)
-                        .last("limit 3"));
+                        .last("ORDER BY RAND() limit 3"));
 
         return Result.ok(blogList);
     }
