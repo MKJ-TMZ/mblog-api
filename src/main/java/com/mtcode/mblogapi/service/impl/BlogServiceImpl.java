@@ -45,7 +45,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
     @Override
     @Transactional(rollbackFor = Exception.class)
-    public void updateOrSaveBlog(BlogVO blogVO) {
+    public String updateOrSaveBlog(BlogVO blogVO) {
         if (blogVO != null) {
             if (blogVO.getIsDraft() != null
                     && !blogVO.getIsDraft()
@@ -71,6 +71,7 @@ public class BlogServiceImpl extends ServiceImpl<BlogMapper, Blog> implements Bl
 
             // 保存博客标签关联信息
             blogTagService.saveBlogTagList(blogVO.getId(), blogVO.getTagNameSet());
+            return blogVO.getId().toString();
         } else {
             throw new ParameterException("参数错误");
         }

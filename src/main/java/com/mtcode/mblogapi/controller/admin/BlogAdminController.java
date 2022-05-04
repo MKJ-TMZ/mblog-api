@@ -23,8 +23,7 @@ public class BlogAdminController {
 
     @PostMapping("")
     public Result saveBlog(@RequestBody BlogVO blogVO) {
-        blogService.updateOrSaveBlog(blogVO);
-        return Result.ok();
+        return Result.ok("保存成功", blogService.updateOrSaveBlog(blogVO));
     }
 
     @GetMapping("/page")

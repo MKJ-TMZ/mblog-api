@@ -4,14 +4,11 @@ import com.mtcode.mblogapi.service.UploadService;
 import com.mtcode.mblogapi.vo.ImageBase64VO;
 import com.mtcode.mblogapi.vo.Result;
 import lombok.AllArgsConstructor;
-import org.springframework.util.Base64Utils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import sun.misc.BASE64Encoder;
 
-import java.io.File;
 import java.io.IOException;
-import java.util.Map;
 
 /**
  * @author TangMingZhang

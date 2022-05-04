@@ -21,7 +21,7 @@ public interface BlogService extends IService<Blog> {
      *
      * @param blogVO blogVO实体类
      */
-    void updateOrSaveBlog(BlogVO blogVO);
+    String updateOrSaveBlog(BlogVO blogVO);
 
     /**
      * 分页查询
