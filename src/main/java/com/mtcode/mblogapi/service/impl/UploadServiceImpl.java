@@ -2,6 +2,7 @@ package com.mtcode.mblogapi.service.impl;
 
 import com.mtcode.mblogapi.exception.ServiceException;
 import com.mtcode.mblogapi.service.UploadService;
+import com.mtcode.mblogapi.util.PicUtils;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
@@ -9,7 +10,10 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestClientException;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.multipart.MultipartFile;
+import sun.misc.BASE64Encoder;
 
+import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -21,14 +25,14 @@ import java.util.Map;
 @Service
 public class UploadServiceImpl implements UploadService {
 
-    private final String GITHUB_TOKEN = "token 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";
+    private final String GITHUB_TOKEN = "";
 
-    @Override
-    public String uploadToGitHub(String base64, String name) {
+    private String uploadToGitHub(String base64, String name) {
         RestTemplate restTemplate = new RestTemplate();
 
         String baseUrl = "https://api.github.com/repos/MKJ-TMZ/imageStore/contents/image/";
-        String cdnUrl = "https://cdn.jsdelivr.net/gh/MKJ-TMZ/imageStore/image/";
+//        String cdnUrl = "https://cdn.jsdelivr.net/gh/MKJ-TMZ/imageStore/image/";
+        String cdnUrl = "https://gcore.jsdelivr.net/gh/MKJ-TMZ/imageStore/image/";
         Date date = new Date();
         String fileName = date.getTime() + "_" + name;
         // headers
@@ -51,5 +55,18 @@ public class UploadServiceImpl implements UploadService {
             throw new ServiceException("上传失败");
         }
         return cdnUrl + fileName;
+    }
+
+    @Override
+    public String uploadToGitHubByBase64(String base64, String name) {
+        return uploadToGitHub(base64, name);
+    }
+
+    @Override
+    public String uploadToGitHubByFile(MultipartFile file, String name) throws IOException {
+        byte[] fileBytes = PicUtils.compressPicForScale(file.getInputStream(), 512);
+        BASE64Encoder base64Encoder = new BASE64Encoder();
+        String base64 = base64Encoder.encode(fileBytes).replaceAll("[\\s*\t\n\r]", "");
+        return uploadToGitHub(base64, name);
     }
 }

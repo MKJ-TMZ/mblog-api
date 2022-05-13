@@ -1,6 +1,9 @@
 package com.mtcode.mblogapi.service;
 
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.multipart.MultipartFile;
+
+import java.io.IOException;
 
 /**
  * @author TangMingZhang
@@ -15,5 +18,14 @@ public interface UploadService {
      * @param name 图片名称
      * @return 图片路径
      */
-    String uploadToGitHub(String base64, String name);
+    String uploadToGitHubByBase64(String base64, String name);
+
+    /**
+     * 上传图片到GitHub
+     *
+     * @param file 图片流
+     * @param name 图片名称
+     * @return 图片路径
+     */
+    String uploadToGitHubByFile(MultipartFile file, String name) throws IOException;
 }
